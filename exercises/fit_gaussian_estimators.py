@@ -47,7 +47,9 @@ def test_multivariate_gaussian():
     # Question 5 - Likelihood evaluation
     a = np.linspace(-10, 10, 1000)
     b = np.linspace(-10, 10, 1000)
-    fig = px.imshow(model.log_likelihood([a, 0, b, 0], model.cov_, random_arr))
+    for i in a:
+        for j in b:
+            fig = px.imshow(model.log_likelihood([a, 0, b, 0], model.cov_, random_arr))
     fig.show()
 
     # Question 6 - Maximum likelihood
