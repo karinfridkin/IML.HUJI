@@ -1,7 +1,9 @@
 from typing import Tuple
 import numpy as np
 import pandas as pd
-
+import sklearn
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
 
 def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .75) \
         -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
@@ -33,7 +35,8 @@ def split_train_test(X: pd.DataFrame, y: pd.Series, train_proportion: float = .7
         Responses of test samples
 
     """
-    raise NotImplementedError()
+    x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y, train_size=train_proportion)
+    return x_train, y_train, x_test, y_test
 
 
 def confusion_matrix(a: np.ndarray, b: np.ndarray) -> np.ndarray:
@@ -54,4 +57,4 @@ def confusion_matrix(a: np.ndarray, b: np.ndarray) -> np.ndarray:
         A confusion matrix where the value of the i,j index shows the number of times value `i` was found in vector `a`
         while value `j` vas found in vector `b`
     """
-    raise NotImplementedError()
+    return sklearn.metrics.confusion_matrix(a,b)

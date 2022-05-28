@@ -6,7 +6,7 @@ import numpy as np
 
 
 def default_callback(fit: Perceptron, x: np.ndarray, y: int):
-    pass
+    return
 
 
 class Perceptron(BaseEstimator):
@@ -73,7 +73,19 @@ class Perceptron(BaseEstimator):
         -----
         Fits model with or without an intercept depending on value of `self.fit_intercept_`
         """
-        raise NotImplementedError()
+        if self.include_intercept_:
+            self.coefs_ = np.zeros(X.shape[1] + 1)
+        else:
+            self.coefs_ = np.zeros(X.shape[1])
+        self.callback_ = []
+        for _ in range(self.max_iter_):
+            for inputs, targets in  zip(X,y):
+                pred_output = self.predict(inputs)
+                errors = targets - pred_output
+
+                if errors != 0:
+                    self.coefs_ +=  errors * inputs
+        return self.coefs_
 
     def _predict(self, X: np.ndarray) -> np.ndarray:
         """
@@ -89,7 +101,9 @@ class Perceptron(BaseEstimator):
         responses : ndarray of shape (n_samples, )
             Predicted responses of given samples
         """
-        raise NotImplementedError()
+        linear_output = np.dot(X, self.coefs_) + self.include_intercept_
+        y_predicted = np.where(linear_output >= 0, 1, -1)
+        return y_predicted
 
     def _loss(self, X: np.ndarray, y: np.ndarray) -> float:
         """
@@ -109,4 +123,4 @@ class Perceptron(BaseEstimator):
             Performance under missclassification loss function
         """
         from ...metrics import misclassification_error
-        raise NotImplementedError()
+        return misclassification_error(self.predict(X), y, True)

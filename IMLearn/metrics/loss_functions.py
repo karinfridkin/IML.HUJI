@@ -1,4 +1,5 @@
 import numpy as np
+import sklearn.metrics
 
 
 def mean_square_error(y_true: np.ndarray, y_pred: np.ndarray) -> float:
@@ -16,7 +17,7 @@ def mean_square_error(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     -------
     MSE of given predictions
     """
-    raise NotImplementedError()
+    return(np.sum((y_true - y_pred)**2)) / y_pred.size
 
 
 def misclassification_error(y_true: np.ndarray, y_pred: np.ndarray, normalize: bool = True) -> float:
@@ -36,7 +37,10 @@ def misclassification_error(y_true: np.ndarray, y_pred: np.ndarray, normalize: b
     -------
     Misclassification of given predictions
     """
-    raise NotImplementedError()
+    if normalize:
+        return (y_true != y_pred).sum() / y_pred.size
+    else:
+        return (y_true != y_pred).sum()
 
 
 def accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
