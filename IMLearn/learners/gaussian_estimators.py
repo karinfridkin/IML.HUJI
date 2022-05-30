@@ -1,7 +1,15 @@
 from __future__ import annotations
 import math
+<<<<<<< HEAD
 import numpy as np
 from scipy.stats import norm
+=======
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import pyplot
+from numpy.linalg import inv, det, slogdet
+import plotly.express as px
+>>>>>>> bd052ab5d836942da6c931c90eca40228aa7c07a
 
 
 class UnivariateGaussian:
@@ -86,8 +94,14 @@ class UnivariateGaussian:
             return (num / denom)
 
         pdf_list = []
+<<<<<<< HEAD
         for i in X:
             pdf_list.append(normpdf(i, self.mu_, self.var_))
+=======
+        for i in range(1000):
+            pdf_list.append(normpdf(X[i], self.mu_, self.var_))
+        print(pdf_list)
+>>>>>>> bd052ab5d836942da6c931c90eca40228aa7c07a
         return pdf_list
 
     @staticmethod
@@ -109,6 +123,7 @@ class UnivariateGaussian:
         log_likelihood: float
             log-likelihood calculated
         """
+<<<<<<< HEAD
         def calc_loglikelihood(residuals):
             return -0.5 * (np.log(np.linalg.det(sigma)) + residuals.T.dot(np.linalg.inv(sigma)).dot(
                 residuals) + 2 * np.log(2 * np.pi))
@@ -118,6 +133,11 @@ class UnivariateGaussian:
 
         loglikelihood = np.apply_along_axis(calc_loglikelihood, 1, residuals)
         loglikelihoodsum = loglikelihood.sum()
+=======
+        return -0.5 * (np.log(np.linalg.det(sigma)) +
+                       (X - mu).T.dot(np.linalg.inv(sigma)).dot(X - mu) +
+                       2 * np.log(2 * np.pi))
+>>>>>>> bd052ab5d836942da6c931c90eca40228aa7c07a
 
         return loglikelihoodsum
 
@@ -193,10 +213,22 @@ class MultivariateGaussian:
         """
         if not self.fitted_:
             raise ValueError("Estimator must first be fitted before calling `pdf` function")
+<<<<<<< HEAD
 
         pdf_list = []
         for i in range(1000):
             pdf_list.append(norm.pdf(X[i], self.mu_, self.cov_))
+=======
+        def normpdf(x, mean, cov):
+            denom = (2 * math.pi * cov) ** .5
+            num = math.exp(-(float(x) - float(mean)) ** 2 / (2 * cov))
+            return num/denom
+
+        pdf_list = []
+        for i in range(1000):
+            pdf_list.append(normpdf(X[i], self.mu_, self.cov_))
+        print(pdf_list)
+>>>>>>> bd052ab5d836942da6c931c90eca40228aa7c07a
         return pdf_list
 
     @staticmethod
@@ -218,6 +250,7 @@ class MultivariateGaussian:
         log_likelihood: float
             log-likelihood calculated
         """
+<<<<<<< HEAD
         def calc_loglikelihood(residuals):
             return -0.5 * (np.log(np.linalg.det(cov)) + residuals.T.dot(np.linalg.inv(cov)).dot(
                 residuals) + 2 * np.log(2 * np.pi))
@@ -229,3 +262,9 @@ class MultivariateGaussian:
         loglikelihoodsum = loglikelihood.sum()
 
         return loglikelihoodsum
+=======
+        X = np.array([x - mu for x in X])
+        return -0.5 * (np.log(np.linalg.cond(cov)) +
+                       X.dot(np.linalg.inv(cov)).dot(X.T) +
+                       2 * np.log(2 * np.pi))
+>>>>>>> bd052ab5d836942da6c931c90eca40228aa7c07a
